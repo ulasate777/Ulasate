@@ -5,12 +5,14 @@ on:
     branches: [ main ]
     paths:
       - 'lotusapp/**'
+      - 'site/**'
       - 'settings.gradle'
       - '.github/workflows/build-lotus-apk.yml'
   push:
     branches: [ main ]
     paths:
       - 'lotusapp/**'
+      - 'site/**'
       - 'settings.gradle'
       - '.github/workflows/build-lotus-apk.yml'
   workflow_dispatch:
