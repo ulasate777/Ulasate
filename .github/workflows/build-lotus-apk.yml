@@ -46,7 +46,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && git reset --hard origin/main)
           git add white-lotus-reader-android7-debug.apk
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "Build White Lotus Android 7 APK [skip ci]"
-          git push
+          git push origin HEAD:main
