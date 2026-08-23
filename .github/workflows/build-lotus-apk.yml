@@ -1,0 +1,45 @@
+name: Build White Lotus Android 7 APK
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'lotusapp/**'
+      - 'settings.gradle'
+      - '.github/workflows/build-lotus-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build Android 7+ debug APK
+        run: gradle --no-daemon :lotusapp:assembleDebug
+      - name: Copy APK
+        run: cp lotusapp/build/outputs/apk/debug/lotusapp-debug.apk white-lotus-reader-android7-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: white-lotus-reader-android7-apk
+          path: white-lotus-reader-android7-debug.apk
+      - name: Commit APK to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add white-lotus-reader-android7-debug.apk
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Build White Lotus Android 7 APK [skip ci]"
+          git push
