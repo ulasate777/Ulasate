@@ -1,6 +1,12 @@
 name: Build White Lotus Android 7 APK
 
 on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'lotusapp/**'
+      - 'settings.gradle'
+      - '.github/workflows/build-lotus-apk.yml'
   push:
     branches: [ main ]
     paths:
@@ -36,6 +42,7 @@ jobs:
           name: white-lotus-reader-android7-apk
           path: white-lotus-reader-android7-debug.apk
       - name: Commit APK to repository
+        if: github.event_name == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
