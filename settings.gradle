@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = 'StarryPages'
 include ':app'
+include ':lotusapp'
